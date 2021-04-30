@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-contract LiquidityMiningLP is Ownable, ReentrancyGuard {
+contract LiquidityFarming is Ownable, ReentrancyGuard {
     using SafeMath for uint256;
     using SafeERC20 for ERC20;
 
@@ -52,22 +52,22 @@ contract LiquidityMiningLP is Ownable, ReentrancyGuard {
     ) public onlyOwner {
         require(
             startTime == 0,
-            "LiquidityMiningLP::deposit: already received deposit"
+            "LiquidityFarming::deposit: already received deposit"
         );
 
         require(
             _startTime >= block.timestamp,
-            "LiquidityMiningLP::deposit: start time must be in future"
+            "LiquidityFarming::deposit: start time must be in future"
         );
 
         require(
             _endTime > _startTime,
-            "LiquidityMiningLP::deposit: end time must after start time"
+            "LiquidityFarming::deposit: end time must after start time"
         );
 
         require(
             sarco.balanceOf(address(this)) == _totalRewards,
-            "LiquidityMiningLP::deposit: contract balance does not equal expected _totalRewards"
+            "LiquidityFarming::deposit: contract balance does not equal expected _totalRewards"
         );
 
         totalRewards = _totalRewards;
@@ -109,14 +109,14 @@ contract LiquidityMiningLP is Ownable, ReentrancyGuard {
     }
 
     function stake(uint256 lpIn) public update nonReentrant {
-        require(lpIn > 0, "LiquidityMiningLP::stake: missing LP");
+        require(lpIn > 0, "LiquidityFarming::stake: missing LP");
         require(
             block.timestamp >= startTime,
-            "LiquidityMiningLP::stake: staking isn't live yet"
+            "LiquidityFarming::stake: staking isn't live yet"
         );
         require(
             sarco.balanceOf(address(this)) > 0,
-            "LiquidityMiningLP::stake: no sarco balance"
+            "LiquidityFarming::stake: no sarco balance"
         );
 
         if (firstStakeTime == 0) {
@@ -124,7 +124,7 @@ contract LiquidityMiningLP is Ownable, ReentrancyGuard {
         } else {
             require(
                 block.timestamp < endTime,
-                "LiquidityMiningLP::stake: staking is over"
+                "LiquidityFarming::stake: staking is over"
             );
         }
 
@@ -172,7 +172,7 @@ contract LiquidityMiningLP is Ownable, ReentrancyGuard {
     {
         require(
             block.timestamp < endTime,
-            "LiquidityMiningLP::payout: withdraw instead"
+            "LiquidityFarming::payout: withdraw instead"
         );
 
         (uint256 lpOut, uint256 _reward) = _applyReward(msg.sender);
@@ -218,7 +218,7 @@ contract LiquidityMiningLP is Ownable, ReentrancyGuard {
     {
         require(
             userStakeLp[account] > 0,
-            "LiquidityMiningLP::_applyReward: no LP staked"
+            "LiquidityFarming::_applyReward: no LP staked"
         );
 
         lpOut = userStakeLp[account];
@@ -242,7 +242,7 @@ contract LiquidityMiningLP is Ownable, ReentrancyGuard {
         if (tokenToRescue == address(lp)) {
             require(
                 amount <= lp.balanceOf(address(this)).sub(totalStakeLp),
-                "LiquidityMiningLP::rescueTokens: that LP belongs to stakers"
+                "LiquidityFarming::rescueTokens: that LP belongs to stakers"
             );
         } else if (tokenToRescue == address(sarco)) {
             if (totalStakers > 0) {
@@ -251,7 +251,7 @@ contract LiquidityMiningLP is Ownable, ReentrancyGuard {
                         sarco.balanceOf(address(this)).sub(
                             totalRewards.sub(totalClaimedRewards)
                         ),
-                    "LiquidityMiningLP::rescueTokens: that sarco belongs to stakers"
+                    "LiquidityFarming::rescueTokens: that sarco belongs to stakers"
                 );
             }
         }

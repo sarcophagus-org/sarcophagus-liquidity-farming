@@ -1,7 +1,7 @@
 /* global artifacts */
 
-const LiquidityMiningLP = artifacts.require('LiquidityMiningLP')
-const LPMock = artifacts.require('DaiMock')
+const LiquidityFarming = artifacts.require('LiquidityFarming')
+const LPMock = artifacts.require('LPMock')
 const SarcoMock = artifacts.require('SarcoMock')
 
 module.exports = async function (deployer, network) {
@@ -18,5 +18,5 @@ module.exports = async function (deployer, network) {
     sarcoAddress = (await SarcoMock.deployed()).address
   }
 
-  await deployer.deploy(LiquidityMiningLP, lpAddress, sarcoAddress)
+  await deployer.deploy(LiquidityFarming, lpAddress, sarcoAddress)
 }
