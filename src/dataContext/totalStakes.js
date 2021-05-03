@@ -1,98 +1,37 @@
 import { useState, useEffect } from 'react'
 import { BigNumber } from 'ethers'
 
-const useTotalStakeUsdc = (liquidityMining) => {
-  const [totalStakeUsdc, setTotalStakeUsdc] = useState(BigNumber.from(0))
+const useTotalStakeLP = (liquidityFarming) => {
+  const [totalStakeLP, setTotalStakeLP] = useState(BigNumber.from(0))
 
   useEffect(() => {
-    if (!liquidityMining) return
+    if (!liquidityFarming) return
 
-    liquidityMining.totalStakeUsdc().then(usdc => {
-      setTotalStakeUsdc(usdc)
+    liquidityFarming.totalStakeLp().then(lp => {
+      setTotalStakeLP(lp)
     }).catch(console.error)
 
-    const addUsdc = (_, usdc) => {
-      setTotalStakeUsdc(_usdc => _usdc.add(usdc))
+    const addLP = (_, lp) => {
+      setTotalStakeLP(_lp => _lp.add(lp))
     }
 
-    const removeUsdc = (_, usdc) => {
-      setTotalStakeUsdc(_usdc => _usdc.sub(usdc))
+    const removeLP = (_, lp) => {
+      setTotalStakeLP(_lp => _lp.sub(lp))
     }
 
-    liquidityMining.on('Stake', addUsdc)
-    liquidityMining.on('Withdraw', removeUsdc)
+    liquidityFarming.on('Stake', addLP)
+    liquidityFarming.on('Withdraw', removeLP)
 
     return () => {
-      liquidityMining.removeListener('Stake', addUsdc)
-      liquidityMining.removeListener('Withdraw', removeUsdc)
+      liquidityFarming.removeListener('Stake', addLP)
+      liquidityFarming.removeListener('Withdraw', removeLP)
     }
-  }, [liquidityMining])
+  }, [liquidityFarming])
 
-  return totalStakeUsdc
+  return totalStakeLP
 }
 
-const useTotalStakeUsdt = (liquidityMining) => {
-  const [totalStakeUsdt, setTotalStakeUsdt] = useState(BigNumber.from(0))
-
-  useEffect(() => {
-    if (!liquidityMining) return
-
-    liquidityMining.totalStakeUsdt().then(usdt => {
-      setTotalStakeUsdt(usdt)
-    }).catch(console.error)
-
-    const addUsdt = (_, __, usdt) => {
-      setTotalStakeUsdt(_usdt => _usdt.add(usdt))
-    }
-
-    const removeUsdt = (_, __, usdt) => {
-      setTotalStakeUsdt(_usdt => _usdt.sub(usdt))
-    }
-
-    liquidityMining.on('Stake', addUsdt)
-    liquidityMining.on('Withdraw', removeUsdt)
-
-    return () => {
-      liquidityMining.removeListener('Stake', addUsdt)
-      liquidityMining.removeListener('Withdraw', removeUsdt)
-    }
-  }, [liquidityMining])
-
-  return totalStakeUsdt
-}
-
-const useTotalStakeDai = (liquidityMining) => {
-  const [totalStakeDai, setTotalStakeDai] = useState(BigNumber.from(0))
-
-  useEffect(() => {
-    if (!liquidityMining) return
-
-    liquidityMining.totalStakeDai().then(dai => {
-      setTotalStakeDai(dai)
-    }).catch(console.error)
-
-    const addDai = (_, __, ___, dai) => {
-      setTotalStakeDai(_dai => _dai.add(dai))
-    }
-
-    const removeDai = (_, __, ___, dai) => {
-      setTotalStakeDai(_dai => _dai.sub(dai))
-    }
-
-    liquidityMining.on('Stake', addDai)
-    liquidityMining.on('Withdraw', removeDai)
-
-    return () => {
-      liquidityMining.removeListener('Stake', addDai)
-      liquidityMining.removeListener('Withdraw', removeDai)
-    }
-  }, [liquidityMining])
-
-  return totalStakeDai
-}
 
 export {
-  useTotalStakeUsdc,
-  useTotalStakeUsdt,
-  useTotalStakeDai,
+  useTotalStakeLP
 }

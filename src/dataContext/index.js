@@ -2,18 +2,11 @@ import { createContext, useContext, useState, useEffect } from 'react'
 import { utils } from 'ethers'
 import numeral from 'numeral'
 import {
-  useLiquidityMiningContract,
-  useUsdcContract,
-  useUsdtContract,
-  useDaiContract,
+  useLiquidityFarmingContract,
+  useLPTokenContract,
   useSarcoContract,
   useDecimals
 } from './contracts'
-import {
-  useTotalStakeUsdc,
-  useTotalStakeUsdt,
-  useTotalStakeDai,
-} from './totalStakes'
 import {
   useTotalRewards,
   useTotalClaimedRewards,
@@ -30,28 +23,18 @@ import {
   useTimeUntilKickoff,
 } from './blocks'
 import {
-  useMyStakeUsdc,
-  useMyStakeUsdt,
-  useMyStakeDai,
-} from './myStakes'
-import {
   useMyPendingRewards,
   useMyClaimedRewards,
   useMyRewardsPerTime,
 } from './myRewards'
 import {
-  useMyUsdcBalance,
-  useMyUsdtBalance,
-  useMyDaiBalance,
-  useMyUsdcAllowance,
-  useMyUsdtAllowance,
-  useMyDaiAllowance,
-} from './myBalances'
-import {
   useCanStake,
   useCanPayout,
   useCanWithdraw,
 } from './abilities'
+import { useTotalStakeLP } from './totalStakes'
+import { useMyStakeLP } from './myStakes'
+import { useMyLPAllowance, useMyLPBalance } from './myBalances'
 
 let context
 
@@ -129,30 +112,24 @@ const createDataRoot = () => {
   }
 
   return ({ children }) => {
-    const liquidityMining = useLiquidityMiningContract()
+    const liquidityFarming = useLiquidityFarmingContract()
 
-    const usdcContract = useUsdcContract(liquidityMining)
-    const usdtContract = useUsdtContract(liquidityMining)
-    const daiContract = useDaiContract(liquidityMining)
-    const sarcoContract = useSarcoContract(liquidityMining)
+    const sarcoContract = useSarcoContract(liquidityFarming)
+    const lpTokenContract = useLPTokenContract(liquidityFarming)
 
-    const decimalsUsdc = useDecimals(usdcContract)
-    const decimalsUsdt = useDecimals(usdtContract)
-    const decimalsDai = useDecimals(daiContract)
     const decimalsSarco = useDecimals(sarcoContract)
+    const decimalsLP = useDecimals(lpTokenContract)
 
-    const totalRewards = useTotalRewards(liquidityMining)
-    const totalClaimedRewards = useTotalClaimedRewards(liquidityMining)
+    const totalRewards = useTotalRewards(liquidityFarming)
+    const totalClaimedRewards = useTotalClaimedRewards(liquidityFarming)
 
-    const totalStakeUsdc = useTotalStakeUsdc(liquidityMining)
-    const totalStakeUsdt = useTotalStakeUsdt(liquidityMining)
-    const totalStakeDai = useTotalStakeDai(liquidityMining)
+    const totalStakeLP= useTotalStakeLP(liquidityFarming)
 
     const currentBlock = useCurrentBlock()
     const currentTime = useCurrentTime(currentBlock)
-    const startTime = useStartTime(liquidityMining)
-    const firstStakeTime = useFirstStakeTime(liquidityMining)
-    const endTime = useEndTime(liquidityMining)
+    const startTime = useStartTime(liquidityFarming)
+    const firstStakeTime = useFirstStakeTime(liquidityFarming)
+    const endTime = useEndTime(liquidityFarming)
     const rewardsPerTime = useRewardsPerTime(totalRewards, startTime, firstStakeTime, endTime)
 
     const timeUntilKickoff = useTimeUntilKickoff(currentTime, startTime)
@@ -163,34 +140,28 @@ const createDataRoot = () => {
     const totalUnemittedRewards = remainingTime.mul(rewardsPerTime)
     const totalUnclaimedRewards = totalEmittedRewards.sub(totalClaimedRewards)
 
-    const myStakeUsdc = useMyStakeUsdc(liquidityMining)
-    const myStakeUsdt = useMyStakeUsdt(liquidityMining)
-    const myStakeDai = useMyStakeDai(liquidityMining)
+    const myStakeLP = useMyStakeLP(liquidityFarming)
 
-    const isActive = startTime.gt(0) && timeUntilKickoff.eq(0) && firstStakeTime.gt(0) && remainingTime.gt(0) && (myStakeUsdc.add(myStakeUsdt).add(myStakeDai).gt(0))
-    const myRewardsPerTime = useMyRewardsPerTime(liquidityMining, currentBlock, rewardsPerTime, isActive)
-    const myPendingRewards = useMyPendingRewards(liquidityMining, currentBlock, currentTime, myRewardsPerTime, isActive)
-    const myClaimedRewards = useMyClaimedRewards(liquidityMining)
+    const isActive = startTime.gt(0) && timeUntilKickoff.eq(0) && firstStakeTime.gt(0) && remainingTime.gt(0) && myStakeLP.gt(0)
+    const myRewardsPerTime = useMyRewardsPerTime(liquidityFarming, currentBlock, rewardsPerTime, isActive)
+    const myPendingRewards = useMyPendingRewards(liquidityFarming, currentBlock, currentTime, myRewardsPerTime, isActive)
+    const myClaimedRewards = useMyClaimedRewards(liquidityFarming)
 
     const myTotalRewards = myPendingRewards.add(myClaimedRewards)
 
-    const myUsdcBalance = useMyUsdcBalance(usdcContract, currentBlock)
-    const myUsdtBalance = useMyUsdtBalance(usdtContract, currentBlock)
-    const myDaiBalance = useMyDaiBalance(daiContract, currentBlock)
+    const myLPBalance = useMyLPBalance(lpContract, currentBlock)
 
-    const myUsdcAllowance = useMyUsdcAllowance(liquidityMining, usdcContract, currentBlock)
-    const myUsdtAllowance = useMyUsdtAllowance(liquidityMining, usdtContract, currentBlock)
-    const myDaiAllowance = useMyDaiAllowance(liquidityMining, daiContract, currentBlock)
+    const myLPAllowance = useMyLPAllowance(liquidityFarming, lpContract, currentBlock)
 
     const systemState = useSystemState(startTime, timeUntilKickoff, firstStakeTime, remainingTime)
 
     const canStake = useCanStake(systemState, StateEnum)
     const canPayout = useCanPayout(myPendingRewards)
-    const canWithdraw = useCanWithdraw(myStakeUsdc, myStakeUsdt, myStakeDai)
+    const canWithdraw = useCanWithdraw(myStakeLP)
 
     const dataContext = {
-      liquidityMining, usdcContract, usdtContract, daiContract, sarcoContract,
-      decimalsUsdc, decimalsUsdt, decimalsDai,
+      liquidityFarming, lpTokenContract, sarcoContract,
+      decimalsLP,
 
       totalRewards: moneyString(totalRewards, decimalsSarco),
       totalClaimedRewards: moneyString(totalClaimedRewards, decimalsSarco),
@@ -199,14 +170,13 @@ const createDataRoot = () => {
       totalUnemittedRewards: moneyString(totalUnemittedRewards, decimalsSarco),
       totalUnclaimedRewards: moneyString(totalUnclaimedRewards, decimalsSarco),
 
-      totalStakeUsdc: moneyString(totalStakeUsdc, decimalsUsdc),
-      totalStakeUsdt: moneyString(totalStakeUsdt, decimalsUsdt),
-      totalStakeDai: moneyString(totalStakeDai, decimalsDai),
-      totalStakeStablecoins: numeral(
-        getDecimalNumber(totalStakeUsdc, decimalsUsdc) +
-        getDecimalNumber(totalStakeUsdt, decimalsUsdt) +
-        getDecimalNumber(totalStakeDai, decimalsDai)
-      ).format(makeDecimals(decimalsDai)),
+      totalStakeLP: moneyString(totalStakeLP, decimalsLP),
+
+      // totalStakeStablecoins: numeral(
+      //   getDecimalNumber(totalStakeUsdc, decimalsUsdc) +
+      //   getDecimalNumber(totalStakeUsdt, decimalsUsdt) +
+      //   getDecimalNumber(totalStakeDai, decimalsDai)
+      // ).format(makeDecimals(decimalsDai)),
 
       currentTime: dateString(currentTime),
       startTime: dateString(startTime),
@@ -215,27 +185,22 @@ const createDataRoot = () => {
       timeUntilKickoff: counterString(timeUntilKickoff),
       remainingTime: counterString(remainingTime),
 
-      myStakeUsdc: moneyString(myStakeUsdc, decimalsUsdc),
-      myStakeUsdt: moneyString(myStakeUsdt, decimalsUsdt),
-      myStakeDai: moneyString(myStakeDai, decimalsDai),
-      myStakedStablecoins: numeral(
-        getDecimalNumber(myStakeUsdc, decimalsUsdc) +
-        getDecimalNumber(myStakeUsdt, decimalsUsdt) +
-        getDecimalNumber(myStakeDai, decimalsDai)
-      ).format(makeDecimals(decimalsDai)),
+      myStakeLP: moneyString(myStakeLP, decimalsLP),
+
+      // myStakedStablecoins: numeral(
+      //   getDecimalNumber(myStakeUsdc, decimalsUsdc) +
+      //   getDecimalNumber(myStakeUsdt, decimalsUsdt) +
+      //   getDecimalNumber(myStakeDai, decimalsDai)
+      // ).format(makeDecimals(decimalsDai)),
 
       myPendingRewards: moneyString(myPendingRewards, decimalsSarco),
       myClaimedRewards: moneyString(myClaimedRewards, decimalsSarco),
       myTotalRewards: moneyString(myTotalRewards, decimalsSarco),
       myRewardsPerTime: moneyString(myRewardsPerTime, decimalsSarco),
 
-      myUsdcBalance: moneyString(myUsdcBalance, decimalsUsdc),
-      myUsdtBalance: moneyString(myUsdtBalance, decimalsUsdt),
-      myDaiBalance: moneyString(myDaiBalance, decimalsDai),
+      myLPBalance: moneyString(myLPBalance, decimalsLP),
 
-      myUsdcAllowance,
-      myUsdtAllowance,
-      myDaiAllowance,
+      myLPAllowance,
 
       canStake,
       canPayout,
