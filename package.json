@@ -35,6 +35,10 @@
     "truffle": "^5.3.2"
   },
   "scripts": {
+    "compile": "truffle compile --all",
+    "develop": "truffle develop",
+    "coverage": "truffle run coverage",
+    "truffle-test": "npm run compile && truffle test",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build -o sarcophagus",
     "start": "REACT_APP_GIT_HASH=`git rev-parse --short HEAD` craco start",
