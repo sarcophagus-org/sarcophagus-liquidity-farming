@@ -15,7 +15,7 @@ const useMyPendingRewards = (liquidityFarming, currentBlock, currentTime, reward
   useEffect(() => {
     if (!liquidityFarming || !account) return
 
-    liquidityFarming.totalUserStake(account).then(stake => {
+    liquidityFarming.userStakeLp(account).then(stake => {
       if (stake.gt(0)) {
         liquidityFarming.callStatic.payout(account).then(reward => {
           setPendingRewards(reward)
