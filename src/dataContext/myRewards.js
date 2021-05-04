@@ -68,7 +68,7 @@ const useMyRewardsPerTime = (liquidityFarming, currentBlock, rewardPerTime, isAc
       return
     }
 
-    Promise.all([liquidityFarming.totalStake(), liquidityFarming.totalUserStake(account)])
+    Promise.all([liquidityFarming.totalStakeLp(), liquidityFarming.userStakeLp(account)])
       .then(([total, user]) => {
         if (total.eq(0)) {
           setRewardIncrement(BigNumber.from(0))
