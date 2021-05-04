@@ -20,7 +20,6 @@ const StakeForm = () => {
     decimalsLP,
     canStake,
   } = useData()
-    console.log("🚀 ~ file: StakeForm.js ~ line 23 ~ StakeForm ~ sarcoContract", sarcoContract)
 
   const [lp, setLP] = useState(0)
 
