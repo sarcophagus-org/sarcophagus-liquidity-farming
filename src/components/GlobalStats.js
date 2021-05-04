@@ -11,7 +11,7 @@ const Container = ({ children }) => {
 
 const SectionContainer = ({ children, topBorder = false }) => {
   return (
-    <div className={`flex flex-col sm:flex-row flex-wrap justify-center ${topBorder ? "pt-6 sm:pt-0 border-t border-gray-500 sm:border-none" : "border-none"}`}>
+    <div className={`flex flex-col sm:flex-row flex-wrap items-center justify-center ${topBorder ? "pt-6 sm:pt-0 border-t border-gray-500 sm:border-none" : "border-none"}`}>
       {children}
     </div>
   )
