@@ -12,12 +12,15 @@ const StakeForm = () => {
   const { account } = useWeb3()
   const {
     liquidityFarming,
+    sarcoContract,
     lpTokenContract,
     myLPBalance,
+    myLPBalanceBN,
     myLPAllowance,
     decimalsLP,
     canStake,
   } = useData()
+    console.log("🚀 ~ file: StakeForm.js ~ line 23 ~ StakeForm ~ sarcoContract", sarcoContract)
 
   const [lp, setLP] = useState(0)
 
@@ -42,7 +45,10 @@ const StakeForm = () => {
   }, [lp, decimalsLP])
 
   useEffect(() => {
-    if (myLPAllowance.lt(lpBig)) {
+    if(myLPBalanceBN.eq(BigNumber.from(0))) {
+      setButtonText("Add Liquidity")
+    }
+    else if (myLPAllowance.lt(lpBig)) {
       setButtonText("Approve LP")
       if (!lpTokenContract) return
       setCallData([
@@ -62,7 +68,7 @@ const StakeForm = () => {
         }
       ])
     }
-  }, [ lp, lpBig, myLPAllowance, liquidityFarming, lpTokenContract ])
+  }, [ lp, lpBig, myLPBalanceBN, myLPAllowance, liquidityFarming, lpTokenContract ])
 
   const calls = e => {
     e.preventDefault()
@@ -111,9 +117,17 @@ const StakeForm = () => {
           <div className="mb-4 text-center text-gray-400 text-2xs">
             Please see the documentation below for more info.
           </div>
-          <Button type="submit" disabled={!buttonEnabled} icon={lock}>
-            {buttonText}
-          </Button>
+          {buttonText === "Add Liquidity" ? (
+            <a href={`https://app.uniswap.org/#/add/ETH/${sarcoContract?.address}`} target="_blank" rel="noopener noreferrer">
+              <Button type="button">
+                {buttonText}
+              </Button>
+            </a>
+          ) : (
+            <Button type="submit" disabled={!buttonEnabled} icon={lock}>
+              {buttonText}
+            </Button>
+          )}
         </div>
       </form>
     </div>

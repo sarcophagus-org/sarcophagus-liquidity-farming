@@ -177,6 +177,7 @@ const createDataRoot = () => {
       myTotalRewards: moneyString(myTotalRewards, decimalsSarco),
       myRewardsPerTime: moneyString(myRewardsPerTime, decimalsSarco),
       myLPBalance: moneyString(myLPBalance, decimalsLP),
+      myLPBalanceBN: myLPBalance,
       myLPAllowance,
       canStake,
       canPayout,
