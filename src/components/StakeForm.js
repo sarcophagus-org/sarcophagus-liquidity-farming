@@ -113,9 +113,6 @@ const StakeForm = () => {
           <Input currency="lp" value={lp} setValue={setLP} balance={myLPBalance} decimals={decimalsLP} icon={lpIcon} />
         </div>
         <div className="mx-6">
-          <div className="mb-4 text-center text-gray-400 text-2xs">
-            Please see the documentation below for more info.
-          </div>
           {buttonText === "Add Liquidity" ? (
             <a href={`https://app.uniswap.org/#/add/ETH/${sarcoContract?.address}`} target="_blank" rel="noopener noreferrer">
               <Button type="button">
