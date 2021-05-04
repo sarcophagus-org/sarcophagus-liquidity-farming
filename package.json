@@ -2,7 +2,6 @@
   "name": "liquidity-farming",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://farming.sarcophagus.io",
   "dependencies": {
     "@craco/craco": "^5.9.0",
     "@metamask/detect-provider": "^1.2.0",
@@ -35,12 +34,6 @@
     "truffle": "^5.3.2"
   },
   "scripts": {
-    "compile": "truffle compile --all",
-    "develop": "truffle develop",
-    "coverage": "truffle run coverage",
-    "truffle-test": "npm run compile && truffle test",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build -o sarcophagus",
     "start": "REACT_APP_GIT_HASH=`git rev-parse --short HEAD` craco start",
     "build": "REACT_APP_GIT_HASH=`git rev-parse --short HEAD` craco build",
     "test": "craco test",

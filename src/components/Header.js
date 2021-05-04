@@ -57,7 +57,7 @@ const Top = () => {
 const Title = () => {
   const { systemState, StateEnum, liquidityFarming } = useData()
 
-  const [liquidityMiningState, setLiquidityFarmingState] = useState("Not Scheduled")
+  const [liquidityFarmingState, setLiquidityFarmingState] = useState("Not Scheduled")
   const [badgeColor, setBadgeColor] = useState("bg-red")
 
   useEffect(() => {
@@ -89,7 +89,7 @@ const Title = () => {
           Liquidity Farming
         </h1>
         <div className={`ml-3 py-1 px-2 ${badgeColor} text-gray-900 text-xs rounded`}>
-          {liquidityMiningState}
+          {liquidityFarmingState}
         </div>
       </div>
       <div className="mt-2 text-gray-400 text-sm underline">

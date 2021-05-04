@@ -13,13 +13,9 @@ const useAddresses = chainId => {
       setAddresses({
         liquidityFarming: process.env.REACT_APP_LOCAL_LIQUIDITY_FARMING_ADDRESS
       })
-    } else if (chainId === 1) {
+    } else {
       setAddresses({
-        liquidityFarming: ''
-      })
-    } else if (chainId === 5) {
-      setAddresses({
-        liquidityFarming: process.env.REACT_APP_GOERLI_LIQUIDITY_FARMING_ADDRESS
+        liquidityFarming: process.env.REACT_APP_LIQUIDITY_FARMING_ADDRESS
       })
     }
   }, [chainId])
