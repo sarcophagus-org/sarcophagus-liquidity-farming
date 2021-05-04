@@ -17,6 +17,10 @@ const useAddresses = chainId => {
       setAddresses({
         liquidityFarming: ''
       })
+    } else if (chainId === 5) {
+      setAddresses({
+        liquidityFarming: process.env.REACT_APP_GOERLI_LIQUIDITY_FARMING_ADDRESS
+      })
     }
   }, [chainId])
 
