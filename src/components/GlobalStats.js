@@ -1,6 +1,5 @@
 import { useData } from '../dataContext'
 import { ValueItem } from './shared/Value'
-import usdc from '../assets/images/usdc-small.svg'
 
 const Container = ({ children }) => {
   return (
@@ -46,7 +45,7 @@ const GlobalStats = () => {
         >Total Unclaimed SARCO</ValueItem>
       </SectionContainer>
       <SectionContainer topBorder>
-        <ValueItem bigValue icon={usdc} value={totalStakeLP}>Total Locked LP</ValueItem>
+        <ValueItem bigValue value={totalStakeLP}>Total Locked LP</ValueItem>
       </SectionContainer>
     </Container>
   )

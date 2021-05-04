@@ -43,12 +43,12 @@ const StakeForm = () => {
 
   useEffect(() => {
     if (myLPAllowance.lt(lpBig)) {
-      setButtonText("Approve USDC")
+      setButtonText("Approve LP")
       if (!lpTokenContract) return
       setCallData([
         lpTokenContract.approve,
         [liquidityFarming?.address, BigNumber.from(2).pow(BigNumber.from(256)).sub(BigNumber.from(1))],
-        "Approving USDC...", "USDC approval failed!", "USDC approval made!"
+        "Approving LP...", "LP approval failed!", "LP approval made!"
       ])
     } else {
       setButtonText("Lock my LP")
@@ -69,7 +69,7 @@ const StakeForm = () => {
     contractCall(...callData)
   }
 
-  const Input = useCallback(({ currency, value, setValue, balance, decimals, icon }) => {
+  const Input = useCallback(({ currency, value, setValue, balance, decimals}) => {
     const calculateValue = setValue => {
       return e => {
         let normalizedValue = ""
@@ -89,9 +89,6 @@ const StakeForm = () => {
       <div className="flex mb-4 text-sm">
         <div className="mr-4 flex flex-col items-center w-10">
           <div className="uppercase mb-2">{currency}</div>
-          <div>
-            <img src={icon} alt="icon" />
-          </div>
         </div>
         <div className="w-full">
           <div className="flex justify-between mb-2 text-gray-400">
