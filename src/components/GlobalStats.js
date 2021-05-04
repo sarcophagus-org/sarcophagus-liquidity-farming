@@ -1,8 +1,6 @@
 import { useData } from '../dataContext'
 import { ValueItem } from './shared/Value'
 import usdc from '../assets/images/usdc-small.svg'
-import usdt from '../assets/images/usdt-small.svg'
-import dai from '../assets/images/dai-small.svg'
 
 const Container = ({ children }) => {
   return (
@@ -27,10 +25,7 @@ const GlobalStats = () => {
     totalClaimedRewards,
     totalUnclaimedRewards,
     totalRewards,
-    totalStakeUsdc,
-    totalStakeUsdt,
-    totalStakeDai,
-    totalStakeStablecoins,
+    totalStakeLP,
   } = useData()
 
   return (
@@ -51,12 +46,7 @@ const GlobalStats = () => {
         >Total Unclaimed SARCO</ValueItem>
       </SectionContainer>
       <SectionContainer topBorder>
-        <ValueItem bigValue icon={usdc} value={totalStakeUsdc}>Total Locked USDC</ValueItem>
-        <ValueItem bigValue icon={usdt} value={totalStakeUsdt}>Total Locked USDT</ValueItem>
-        <ValueItem bigValue icon={dai} value={totalStakeDai}>Total Locked DAI</ValueItem>
-        <ValueItem bigValue bold value={totalStakeStablecoins}
-          tooltipText="&quot;Total Locked Stablecoins&quot; refers to the sum of all stablecoins that have been locked by everyone participating in liquidity mining"
-        >Total Locked Stablecoins</ValueItem>
+        <ValueItem bigValue icon={usdc} value={totalStakeLP}>Total Locked LP</ValueItem>
       </SectionContainer>
     </Container>
   )

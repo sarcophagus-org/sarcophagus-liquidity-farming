@@ -9,11 +9,8 @@ import unlock from '../assets/images/unlock.svg'
 const Unlock = () => {
   const { account } = useWeb3()
   const {
-    myStakeUsdc,
-    myStakeUsdt,
-    myStakeDai,
-    myStakedStablecoins,
-    liquidityMining,
+    myStakeLP,
+    liquidityFarming,
     canPayout,
     canWithdraw,
   } = useData()
@@ -28,7 +25,7 @@ const Unlock = () => {
 
   const withdraw = () => {
     contractCall(
-      liquidityMining.withdraw, [account, { }],
+      liquidityFarming.withdraw, [account, { }],
       "Unlocking stablecoins...", "Unlock failed!", "Unlock successful!"
     )
   }
@@ -36,13 +33,10 @@ const Unlock = () => {
   return (
     <div>
       <div className="mx-4 mb-4">
-        <Row value={myStakeUsdc}>USDC Locked</Row>
-        <Row value={myStakeUsdt}>USDT Locked</Row>
-        <Row value={myStakeDai}>DAI Locked</Row>
-        <Row value={myStakedStablecoins} total>Total Locked</Row>
+        <Row value={myStakeLP}>LP Locked</Row>
       </div>
       <Button disabled={!withdrawEnabled} onClick={withdraw} icon={unlock}>
-        Unlock my Stablecoins
+        Unlock my LP Tokens
       </Button>
     </div>
   )

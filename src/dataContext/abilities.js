@@ -23,13 +23,13 @@ const useCanPayout = (pendingRewards) => {
   return canPayout
 }
 
-const useCanWithdraw = (usdc, usdt, dai) => {
+const useCanWithdraw = (lp) => {
   const { account } = useWeb3()
   const [canWithdraw, setCanWithdraw] = useState(false)
 
   useEffect(() => {
-    setCanWithdraw(account && (usdc.gt(0) || usdt.gt(0) || dai.gt(0)))
-  }, [account, usdc, usdt, dai])
+    setCanWithdraw(account && lp.gt(0))
+  }, [ account, lp ])
 
   return canWithdraw
 }

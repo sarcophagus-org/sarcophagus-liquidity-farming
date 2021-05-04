@@ -9,7 +9,7 @@ const useMyStakeLP = (liquidityFarming) => {
   useEffect(() => {
     if (!liquidityFarming || !account) return
 
-    liquidityFarming.userStakeLP(account).then(lp => {
+    liquidityFarming.userStakeLp(account).then(lp => {
       setMyStakeLP(lp)
     }).catch(console.error)
 
@@ -21,10 +21,10 @@ const useMyStakeLP = (liquidityFarming) => {
       setMyStakeLP(_lp => _lp.sub(lp))
     }
 
-    const myStakeFilter = liquidityFarming.filters.Stake(account, null, null, null)
+    const myStakeFilter = liquidityFarming.filters.Stake(account, null)
     liquidityFarming.on(myStakeFilter, addLP)
 
-    const myWithdrawFilter = liquidityFarming.filters.Withdraw(account, null, null, null, null)
+    const myWithdrawFilter = liquidityFarming.filters.Withdraw(account, null, null)
     liquidityFarming.on(myWithdrawFilter, removeLP)
 
     return () => {

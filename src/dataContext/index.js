@@ -79,10 +79,6 @@ const createDataRoot = () => {
     return new Date(seconds * 1000).toLocaleString()
   }
 
-  const getDecimalNumber = (bigNumber, decimals) => {
-    return makeNumeral(bigNumber, decimals).value()
-  }
-
   const StateEnum = Object.freeze({
     NotScheduled: 1,
     Scheduled: 2,
@@ -149,9 +145,9 @@ const createDataRoot = () => {
 
     const myTotalRewards = myPendingRewards.add(myClaimedRewards)
 
-    const myLPBalance = useMyLPBalance(lpContract, currentBlock)
+    const myLPBalance = useMyLPBalance(lpTokenContract, currentBlock)
 
-    const myLPAllowance = useMyLPAllowance(liquidityFarming, lpContract, currentBlock)
+    const myLPAllowance = useMyLPAllowance(liquidityFarming, lpTokenContract, currentBlock)
 
     const systemState = useSystemState(startTime, timeUntilKickoff, firstStakeTime, remainingTime)
 
@@ -162,50 +158,29 @@ const createDataRoot = () => {
     const dataContext = {
       liquidityFarming, lpTokenContract, sarcoContract,
       decimalsLP,
-
       totalRewards: moneyString(totalRewards, decimalsSarco),
       totalClaimedRewards: moneyString(totalClaimedRewards, decimalsSarco),
       rewardsPerTime: moneyString(rewardsPerTime, decimalsSarco),
       totalEmittedRewards: moneyString(totalEmittedRewards, decimalsSarco),
       totalUnemittedRewards: moneyString(totalUnemittedRewards, decimalsSarco),
       totalUnclaimedRewards: moneyString(totalUnclaimedRewards, decimalsSarco),
-
       totalStakeLP: moneyString(totalStakeLP, decimalsLP),
-
-      // totalStakeStablecoins: numeral(
-      //   getDecimalNumber(totalStakeUsdc, decimalsUsdc) +
-      //   getDecimalNumber(totalStakeUsdt, decimalsUsdt) +
-      //   getDecimalNumber(totalStakeDai, decimalsDai)
-      // ).format(makeDecimals(decimalsDai)),
-
       currentTime: dateString(currentTime),
       startTime: dateString(startTime),
       firstStakeTime: dateString(firstStakeTime),
       endTime: dateString(endTime),
       timeUntilKickoff: counterString(timeUntilKickoff),
       remainingTime: counterString(remainingTime),
-
       myStakeLP: moneyString(myStakeLP, decimalsLP),
-
-      // myStakedStablecoins: numeral(
-      //   getDecimalNumber(myStakeUsdc, decimalsUsdc) +
-      //   getDecimalNumber(myStakeUsdt, decimalsUsdt) +
-      //   getDecimalNumber(myStakeDai, decimalsDai)
-      // ).format(makeDecimals(decimalsDai)),
-
       myPendingRewards: moneyString(myPendingRewards, decimalsSarco),
       myClaimedRewards: moneyString(myClaimedRewards, decimalsSarco),
       myTotalRewards: moneyString(myTotalRewards, decimalsSarco),
       myRewardsPerTime: moneyString(myRewardsPerTime, decimalsSarco),
-
       myLPBalance: moneyString(myLPBalance, decimalsLP),
-
       myLPAllowance,
-
       canStake,
       canPayout,
       canWithdraw,
-
       systemState, StateEnum
     }
 

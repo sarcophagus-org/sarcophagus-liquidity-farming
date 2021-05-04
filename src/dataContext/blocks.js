@@ -52,13 +52,13 @@ const useCurrentTime = (blockNumber) => {
   return currentTime
 }
 
-const useStartTime = (liquidityMining) => {
+const useStartTime = (liquidityFarming) => {
   const [startTime, setStartTime] = useState(BigNumber.from(0))
 
   useEffect(() => {
-    if (!liquidityMining) return
+    if (!liquidityFarming) return
 
-    liquidityMining.startTime().then(startTime => {
+    liquidityFarming.startTime().then(startTime => {
       setStartTime(startTime)
     }).catch(console.error)
 
@@ -66,49 +66,49 @@ const useStartTime = (liquidityMining) => {
       setStartTime(startTime)
     }
 
-    liquidityMining.on('Deposit', updateStartTime)
+    liquidityFarming.on('Deposit', updateStartTime)
 
     return () => {
-      liquidityMining.removeListener('Deposit', updateStartTime)
+      liquidityFarming.removeListener('Deposit', updateStartTime)
     }
 
-  }, [liquidityMining])
+  }, [liquidityFarming])
 
   return startTime
 }
 
-const useFirstStakeTime = (liquidityMining) => {
+const useFirstStakeTime = (liquidityFarming) => {
   const [firstStakeTime, setFirstStakeTime] = useState(BigNumber.from(0))
 
   useEffect(() => {
-    if (!liquidityMining) return
+    if (!liquidityFarming) return
 
     const updateFirstStake = () => {
-      liquidityMining.firstStakeTime().then(firstStakeTime => {
+      liquidityFarming.firstStakeTime().then(firstStakeTime => {
         setFirstStakeTime(firstStakeTime)
       }).catch(console.error)
     }
 
     updateFirstStake()
 
-    liquidityMining.on('Stake', updateFirstStake)
+    liquidityFarming.on('Stake', updateFirstStake)
 
     return () => {
-      liquidityMining.removeListener('Stake', updateFirstStake)
+      liquidityFarming.removeListener('Stake', updateFirstStake)
     }
 
-  }, [liquidityMining])
+  }, [liquidityFarming])
 
   return firstStakeTime
 }
 
-const useEndTime = (liquidityMining) => {
+const useEndTime = (liquidityFarming) => {
   const [endTime, setEndTime] = useState(BigNumber.from(0))
 
   useEffect(() => {
-    if (!liquidityMining) return
+    if (!liquidityFarming) return
 
-    liquidityMining.endTime().then(endTime => {
+    liquidityFarming.endTime().then(endTime => {
       setEndTime(endTime)
     }).catch(console.error)
 
@@ -116,12 +116,12 @@ const useEndTime = (liquidityMining) => {
       setEndTime(_endTime)
     }
 
-    liquidityMining.on('Deposit', updateEndTime)
+    liquidityFarming.on('Deposit', updateEndTime)
 
     return () => {
-      liquidityMining.removeListener('Deposit', updateEndTime)
+      liquidityFarming.removeListener('Deposit', updateEndTime)
     }
-  }, [liquidityMining])
+  }, [liquidityFarming])
 
   return endTime
 }

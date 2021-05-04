@@ -5,37 +5,23 @@ import { useData } from '../dataContext'
 import { useTransaction } from '../dataContext/transactions'
 import { useWeb3 } from '../web3'
 import { Button } from './shared/Button'
-import usdcIcon from '../assets/images/usdc.svg'
-import usdtIcon from '../assets/images/usdt.svg'
-import daiIcon from '../assets/images/dai.svg'
+import lpIcon from '../assets/images/usdc.svg'
 import lock from '../assets/images/lock.svg'
 
 const StakeForm = () => {
   const { account } = useWeb3()
   const {
-    liquidityMining,
-    usdcContract,
-    usdtContract,
-    daiContract,
-    myUsdcBalance,
-    myUsdtBalance,
-    myDaiBalance,
-    myUsdcAllowance,
-    myUsdtAllowance,
-    myDaiAllowance,
-    decimalsUsdc,
-    decimalsUsdt,
-    decimalsDai,
+    liquidityFarming,
+    lpTokenContract,
+    myLPBalance,
+    myLPAllowance,
+    decimalsLP,
     canStake,
   } = useData()
 
-  const [usdc, setUsdc] = useState(0)
-  const [usdt, setUsdt] = useState(0)
-  const [dai, setDai] = useState(0)
+  const [lp, setLP] = useState(0)
 
-  const [usdcBig, setUsdcBig] = useState(BigNumber.from(0))
-  const [usdtBig, setUsdtBig] = useState(BigNumber.from(0))
-  const [daiBig, setDaiBig] = useState(BigNumber.from(0))
+  const [lpBig, setLPBig] = useState(BigNumber.from(0))
 
   const [buttonText, setButtonText] = useState("Stake")
   const { contractCall, pending } = useTransaction()
@@ -44,67 +30,39 @@ const StakeForm = () => {
   const [buttonEnabled, setButtonEnabled] = useState(false)
 
   useEffect(() => {
-    setButtonEnabled(!pending && (usdcBig.gt(0) || usdtBig.gt(0) || daiBig.gt(0)))
-  }, [pending, usdcBig, usdtBig, daiBig])
+    setButtonEnabled(!pending && lpBig.gt(0))
+  }, [pending, lpBig])
 
   useEffect(() => {
-    setUsdc(0)
-    setUsdt(0)
-    setDai(0)
+    setLP(0)
   }, [account])
 
   useEffect(() => {
-    setUsdcBig(utils.parseUnits((usdc || 0).toFixed(decimalsUsdc), decimalsUsdc))
-  }, [usdc, decimalsUsdc])
+    setLPBig(utils.parseUnits((lp || 0).toFixed(decimalsLP), decimalsLP))
+  }, [lp, decimalsLP])
 
   useEffect(() => {
-    setUsdtBig(utils.parseUnits((usdt || 0).toFixed(decimalsUsdt), decimalsUsdt))
-  }, [usdt, decimalsUsdt])
-
-  useEffect(() => {
-    setDaiBig(utils.parseUnits((dai || 0).toFixed(decimalsDai), decimalsDai))
-  }, [dai, decimalsDai])
-
-  useEffect(() => {
-    if (myUsdcAllowance.lt(usdcBig)) {
+    if (myLPAllowance.lt(lpBig)) {
       setButtonText("Approve USDC")
-      if (!usdcContract) return
+      if (!lpTokenContract) return
       setCallData([
-        usdcContract.approve,
-        [liquidityMining?.address, BigNumber.from(2).pow(BigNumber.from(256)).sub(BigNumber.from(1))],
+        lpTokenContract.approve,
+        [liquidityFarming?.address, BigNumber.from(2).pow(BigNumber.from(256)).sub(BigNumber.from(1))],
         "Approving USDC...", "USDC approval failed!", "USDC approval made!"
       ])
-    } else if (myUsdtAllowance.lt(usdtBig)) {
-      setButtonText("Approve USDT")
-      if (!usdtContract) return
-      setCallData([
-        usdtContract.approve,
-        [liquidityMining?.address, BigNumber.from(2).pow(BigNumber.from(256)).sub(BigNumber.from(1))],
-        "Approving USDT...", "USDT approval failed!", "USDT approval made!"
-      ])
-    } else if (myDaiAllowance.lt(daiBig)) {
-      setButtonText("Approve DAI")
-      if (!daiContract) return
-      setCallData([
-        daiContract.approve,
-        [liquidityMining?.address, BigNumber.from(2).pow(BigNumber.from(256)).sub(BigNumber.from(1))],
-        "Approving DAI...", "DAI approval failed!", "DAI approval made!"
-      ])
     } else {
-      setButtonText("Lock my Stablecoins")
-      if (!liquidityMining) return
+      setButtonText("Lock my LP")
+      if (!liquidityFarming) return
       setCallData([
-        liquidityMining.stake,
-        [usdcBig, usdtBig, daiBig, { }],
+        liquidityFarming.stake,
+        [lpBig, { }],
         "Locking coins...", "Lock failed!", "Lock made!",
         () => {
-          setUsdc(0)
-          setUsdt(0)
-          setDai(0)
+          setLP(0)
         }
       ])
     }
-  }, [usdc, usdt, dai, usdcBig, usdtBig, daiBig, myUsdcAllowance, myUsdtAllowance, myDaiAllowance, liquidityMining, usdcContract, usdtContract, daiContract])
+  }, [ lp, lpBig, myLPAllowance, liquidityFarming, lpTokenContract ])
 
   const calls = e => {
     e.preventDefault()
@@ -149,10 +107,8 @@ const StakeForm = () => {
   return (
     <div>
       <form onSubmit={calls}>
-        <div className="mt-2 flex flex-col w-full">
-          <Input currency="usdc" value={usdc} setValue={setUsdc} balance={myUsdcBalance} decimals={decimalsUsdc} icon={usdcIcon} />
-          <Input currency="usdt" value={usdt} setValue={setUsdt} balance={myUsdtBalance} decimals={decimalsUsdt} icon={usdtIcon} />
-          <Input currency="dai" value={dai} setValue={setDai} balance={myDaiBalance} decimals={6} icon={daiIcon} />
+        <div className="mt-2 flex flex-col w-full items-center">
+          <Input currency="lp" value={lp} setValue={setLP} balance={myLPBalance} decimals={decimalsLP} icon={lpIcon} />
         </div>
         <div className="mx-6">
           <div className="mb-4 text-center text-gray-400 text-2xs">

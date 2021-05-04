@@ -29,7 +29,7 @@ const ValueItem = ({ children, value, bigValue = false, bold = false, icon, tool
 const Row = ({ children, value, total }) => {
   return (
     <div className="flex mb-1 items-center">
-      <div className="w-1/2 text-right text-gray-400">
+      <div className="w-1/2 text-left text-gray-400 whitespace-nowrap">
         {children}
       </div>
       <div className={`w-1/2 ml-2 text-right truncate ${total ? "font-bold": ""}`}>
