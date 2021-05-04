@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react'
 import { BigNumber } from 'ethers'
 
-const useTotalRewards = (liquidityMining) => {
+const useTotalRewards = (liquidityFarming) => {
   const [totalSarcoRewards, setTotalSarcoRewards] = useState(BigNumber.from(0))
 
   useEffect(() => {
-    if (!liquidityMining) return
+    if (!liquidityFarming) return
 
-    liquidityMining.totalRewards().then(sarco => {
+    liquidityFarming.totalRewards().then(sarco => {
       setTotalSarcoRewards(sarco)
     }).catch(console.error)
 
@@ -15,24 +15,24 @@ const useTotalRewards = (liquidityMining) => {
       setTotalSarcoRewards(totalRewards)
     }
 
-    liquidityMining.on('Deposit', updateTotalRewards)
+    liquidityFarming.on('Deposit', updateTotalRewards)
 
     return () => {
-      liquidityMining.removeListener('Deposit', updateTotalRewards)
+      liquidityFarming.removeListener('Deposit', updateTotalRewards)
     }
 
-  }, [liquidityMining])
+  }, [liquidityFarming])
 
   return totalSarcoRewards
 }
 
-const useTotalClaimedRewards = (liquidityMining) => {
+const useTotalClaimedRewards = (liquidityFarming) => {
   const [totalClaimedSarcoRewards, setTotalClaimedSarcoRewards] = useState(BigNumber.from(0))
 
   useEffect(() => {
-    if (!liquidityMining) return
+    if (!liquidityFarming) return
 
-    liquidityMining.totalClaimedRewards().then(sarco => {
+    liquidityFarming.totalClaimedRewards().then(sarco => {
         setTotalClaimedSarcoRewards(sarco)
       }).catch(console.error)
 
@@ -40,12 +40,12 @@ const useTotalClaimedRewards = (liquidityMining) => {
       setTotalClaimedSarcoRewards(sarco => sarco.add(_sarco))
     }
 
-    liquidityMining.on('Payout', getClaimedRewards)
+    liquidityFarming.on('Payout', getClaimedRewards)
 
     return () => {
-      liquidityMining.removeListener('Payout', getClaimedRewards)
+      liquidityFarming.removeListener('Payout', getClaimedRewards)
     }
-  }, [liquidityMining])
+  }, [liquidityFarming])
 
   return totalClaimedSarcoRewards
 }

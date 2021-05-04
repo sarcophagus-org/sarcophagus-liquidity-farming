@@ -14,7 +14,7 @@ const Claim = () => {
   } = useData()
 
   const { account } = useWeb3()
-  const { liquidityMining, canPayout } = useData()
+  const { liquidityFarming, canPayout } = useData()
 
   const { contractCall, pending } = useTransaction()
   const [payoutEnabled, setPayoutEnabled] = useState(false)
@@ -25,14 +25,14 @@ const Claim = () => {
 
   const payout = () => {
     contractCall(
-      liquidityMining.payout, [account, { }],
+      liquidityFarming.payout, [account, { }],
       "Paying out rewards...", "Payout failed!", "Payout successful!"
     )
   }
 
   return (
     <div>
-      <div className="mx-4 mb-4">
+      <div className="mb-4 mx-4">
         <div className="mb-3">
           <Row value={myRewardsPerTime}>SARCO / second</Row>
         </div>

@@ -2,85 +2,55 @@ import { useState, useEffect } from 'react'
 import { Contract } from 'ethers'
 import { useWeb3 } from '../web3'
 import { useAddresses } from '../web3/chains'
-import LiquidityMining from '../../build-contracts/LiquidityMining.json'
+import LiquidityFarming from '../../build-contracts/LiquidityFarming.json'
 import ERC20 from '../../build-contracts/ERC20.json'
 
-const useLiquidityMiningContract = () => {
+const useLiquidityFarmingContract = () => {
   const { chainId, signerOrProvider } = useWeb3()
   const addresses = useAddresses(chainId)
-  const [liquidityMiningContract, setLiquidityMiningContract] = useState()
+  const [liquidityFarmingContract, setLiquidityFarmingContract] = useState()
 
   useEffect(() => {
     if (!chainId || !addresses || !signerOrProvider) return
 
-    setLiquidityMiningContract(new Contract(addresses.liquidityMining, LiquidityMining.abi, signerOrProvider))
+    setLiquidityFarmingContract(new Contract(addresses.liquidityFarming, LiquidityFarming.abi, signerOrProvider))
   }, [chainId, signerOrProvider, addresses])
 
-  return liquidityMiningContract
+  return liquidityFarmingContract
 }
 
-const useUsdcContract = (liquidityMining) => {
+const useLPTokenContract = (liquidityFarming) => {
   const { signerOrProvider } = useWeb3()
-  const [usdcContract, setUsdcContract] = useState()
+  const [ lpToken, setLPToken ] = useState()
 
   useEffect(() => {
-    if (!liquidityMining || !signerOrProvider) return
+    if (!liquidityFarming || !signerOrProvider) return
 
-    liquidityMining.usdc().then(usdc => {
-      setUsdcContract(new Contract(usdc, ERC20.abi, signerOrProvider))
+    liquidityFarming.lp().then(lp => {
+      setLPToken(new Contract(lp, ERC20.abi, signerOrProvider))
     }).catch(console.error)
-  }, [liquidityMining, signerOrProvider])
+  }, [liquidityFarming, signerOrProvider])
 
-  return usdcContract
+  return lpToken
 }
 
-const useUsdtContract = (liquidityMining) => {
+const useSarcoContract = (liquidityFarming) => {
   const { signerOrProvider } = useWeb3()
-  const [usdtContract, setUsdtContract] = useState()
+  const [ sarcoContract, setSarcoContract ] = useState()
 
   useEffect(() => {
-    if (!liquidityMining || !signerOrProvider) return
+    if (!liquidityFarming || !signerOrProvider) return
 
-    liquidityMining.usdt().then(usdt => {
-      setUsdtContract(new Contract(usdt, ERC20.abi, signerOrProvider))
-    }).catch(console.error)
-  }, [liquidityMining, signerOrProvider])
-
-  return usdtContract
-}
-
-const useDaiContract = (liquidityMining) => {
-  const { signerOrProvider } = useWeb3()
-  const [daiContract, setDaiContract] = useState()
-
-  useEffect(() => {
-    if (!liquidityMining || !signerOrProvider) return
-
-    liquidityMining.dai().then(dai => {
-      setDaiContract(new Contract(dai, ERC20.abi, signerOrProvider))
-    }).catch(console.error)
-  }, [liquidityMining, signerOrProvider])
-
-  return daiContract
-}
-
-const useSarcoContract = (liquidityMining) => {
-  const { signerOrProvider } = useWeb3()
-  const [sarcoContract, setSarcoContract] = useState()
-
-  useEffect(() => {
-    if (!liquidityMining || !signerOrProvider) return
-
-    liquidityMining.sarco().then(sarco => {
+    liquidityFarming.sarco().then(sarco => {
       setSarcoContract(new Contract(sarco, ERC20.abi, signerOrProvider))
     }).catch(console.error)
-  }, [liquidityMining, signerOrProvider])
+  }, [liquidityFarming, signerOrProvider])
 
   return sarcoContract
 }
 
 const useDecimals = (contract) => {
-  const [decimals, setDecimals] = useState(0)
+  const [ decimals, setDecimals ] = useState(0)
 
   useEffect(() => {
     if (!contract) return
@@ -94,10 +64,8 @@ const useDecimals = (contract) => {
 }
 
 export {
-  useLiquidityMiningContract,
-  useUsdcContract,
-  useUsdtContract,
-  useDaiContract,
+  useLiquidityFarmingContract,
+  useLPTokenContract,
   useSarcoContract,
   useDecimals
 }
