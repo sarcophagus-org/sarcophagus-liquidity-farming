@@ -94,8 +94,8 @@ const StakeForm = () => {
       <div className="flex mb-4 text-sm">
         <div className="w-full">
           <div className="flex justify-between mb-2 text-gray-400">
-            <div className="mr-2">Amount*</div>
-            <div>Balance: {balance}</div>
+            <div>Balance:</div>
+            <div>{balance}</div>
           </div>
           <input type="number" step={makeStep(decimals)} disabled={inputDisable} required name={currency} id={currency} value={value} onChange={calculateValue(setValue)} min="0" max={balance} className={`w-full border-2 border-gray-500 ${inputDisable ? 'text-gray-400' : 'text-white'} bg-gray-900`} placeholder={balance} />
         </div>
@@ -106,7 +106,7 @@ const StakeForm = () => {
   return (
     <div>
       <form onSubmit={calls}>
-        <div className="mt-2 flex flex-col w-full items-center">
+        <div className="mt-2 flex flex-col w-full px-6">
           <Input currency="lp" value={lp} setValue={setLP} balance={myLPBalance} decimals={decimalsLP} icon={lpIcon} />
         </div>
         <div className="mx-6">
