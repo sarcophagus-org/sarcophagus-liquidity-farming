@@ -44,18 +44,15 @@ const createDataRoot = () => {
   context.displayName = 'Data Provider'
   const Provider = context.Provider
 
-  const makeDecimals = decimals => {
-    return `0,0.[${Array(decimals).fill(0).join("")}]`
-  }
-
   const makeNumeral = (bigNumber, decimals) => {
     return numeral(utils.formatUnits(bigNumber, decimals))
   }
 
-  const moneyString = (bigNumber, decimals) => {
-    const money = makeNumeral(bigNumber, decimals).format(makeDecimals(decimals))
-    if (money === "NaN") return "0"
-    return money
+  const moneyString = (bigNumber, decimals, decimalsToShow = 6) => {
+    const money = makeNumeral(bigNumber, decimals).value()
+    const localeString = Math.abs(money).toLocaleString(undefined, {minimumFractionDigits: decimalsToShow, maximumFractionDigits: decimalsToShow})
+    if (money === "NaN" || money === 0 || !decimals) return "0"
+    return localeString
   }
 
   const counterString = seconds => {
@@ -158,7 +155,7 @@ const createDataRoot = () => {
     const dataContext = {
       liquidityFarming, lpTokenContract, sarcoContract,
       decimalsLP,
-      totalRewards: moneyString(totalRewards, decimalsSarco),
+      totalRewards: moneyString(totalRewards, decimalsSarco, 0),
       totalClaimedRewards: moneyString(totalClaimedRewards, decimalsSarco),
       rewardsPerTime: moneyString(rewardsPerTime, decimalsSarco),
       totalEmittedRewards: moneyString(totalEmittedRewards, decimalsSarco),
@@ -176,7 +173,7 @@ const createDataRoot = () => {
       myClaimedRewards: moneyString(myClaimedRewards, decimalsSarco),
       myTotalRewards: moneyString(myTotalRewards, decimalsSarco),
       myRewardsPerTime: moneyString(myRewardsPerTime, decimalsSarco),
-      myLPBalance: moneyString(myLPBalance, decimalsLP),
+      myLPBalance: makeNumeral(myLPBalance, decimalsLP).input() || 0,
       myLPBalanceBN: myLPBalance,
       myLPAllowance,
       canStake,
