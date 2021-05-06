@@ -45,7 +45,7 @@ const StakeForm = () => {
 
   useEffect(() => {
     if(myLPBalanceBN.eq(BigNumber.from(0))) {
-      setButtonText("Add Liquidity")
+      setButtonText("Add Liquidity on Uniswap")
     }
     else if (myLPAllowance.lt(lpBig)) {
       setButtonText("Approve LP")
@@ -92,9 +92,6 @@ const StakeForm = () => {
 
     return (
       <div className="flex mb-4 text-sm">
-        <div className="mr-4 flex flex-col items-center w-10">
-          <div className="uppercase mb-2">{currency}</div>
-        </div>
         <div className="w-full">
           <div className="flex justify-between mb-2 text-gray-400">
             <div className="mr-2">Amount*</div>
@@ -113,6 +110,11 @@ const StakeForm = () => {
           <Input currency="lp" value={lp} setValue={setLP} balance={myLPBalance} decimals={decimalsLP} icon={lpIcon} />
         </div>
         <div className="mx-6">
+          <div className="mb-4 text-center text-gray-400 text-2xs">
+            <span>Please see the</span>
+            <a className="mx-2 text-white underline" href="https://sarcophagus.gitbook.io/sarcophagus-documentation/stablecoin-liquidity-mining-1/stablecoin-liquidity-mining" target="_blank" rel="noopener noreferrer">documentation</a>
+            <span>for more info</span>
+          </div>
           {buttonText === "Add Liquidity" ? (
             <a href={`https://app.uniswap.org/#/add/ETH/${sarcoContract?.address}`} target="_blank" rel="noopener noreferrer">
               <Button type="button">

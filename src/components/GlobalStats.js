@@ -45,7 +45,7 @@ const GlobalStats = () => {
         >Total Unclaimed SARCO</ValueItem>
       </SectionContainer>
       <SectionContainer topBorder>
-        <ValueItem bigValue value={totalStakeLP}>Total Locked LP</ValueItem>
+        <ValueItem bigValue value={totalStakeLP}>Total Locked UNI-V2 LP SARCO/ETH</ValueItem>
       </SectionContainer>
     </Container>
   )

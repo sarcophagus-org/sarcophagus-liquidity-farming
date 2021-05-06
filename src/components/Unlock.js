@@ -33,7 +33,7 @@ const Unlock = () => {
   return (
     <div>
       <div className="mx-4 mb-4">
-        <Row value={myStakeLP}>LP Locked</Row>
+        <Row value={myStakeLP}>UNI-V2 LP SARCO/ETH Locked</Row>
       </div>
       <Button disabled={!withdrawEnabled} onClick={withdraw} icon={unlock}>
         Unlock my LP Tokens
