@@ -33,9 +33,7 @@ const Claim = () => {
   return (
     <div>
       <div className="mb-4 mx-4">
-        <div className="mb-3">
-          <Row value={myRewardsPerTime}>SARCO / second</Row>
-        </div>
+        <Row value={myRewardsPerTime}>SARCO / second</Row>
         <Row value={myPendingRewards}>SARCO Pending</Row>
         <Row value={myClaimedRewards}>SARCO Claimed</Row>
         <Row value={myTotalRewards} total>SARCO Total</Row>
