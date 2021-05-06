@@ -115,7 +115,7 @@ const StakeForm = () => {
             <a className="mx-2 text-white underline" href="https://sarcophagus.gitbook.io/sarcophagus-documentation/stablecoin-liquidity-mining-1/stablecoin-liquidity-mining" target="_blank" rel="noopener noreferrer">documentation</a>
             <span>for more info</span>
           </div>
-          {buttonText === "Add Liquidity" ? (
+          {buttonText === "Add Liquidity on Uniswap" ? (
             <a href={`https://app.uniswap.org/#/add/ETH/${sarcoContract?.address}`} target="_blank" rel="noopener noreferrer">
               <Button type="button">
                 {buttonText}

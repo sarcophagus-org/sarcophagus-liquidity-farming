@@ -31,7 +31,7 @@ const Unlock = () => {
   }
 
   return (
-    <div>
+    <div className="flex flex-col justify-center items-center">
       <div className="mx-4 mb-4">
         <Row value={myStakeLP}>UNI-V2 LP SARCO/ETH Locked</Row>
       </div>
