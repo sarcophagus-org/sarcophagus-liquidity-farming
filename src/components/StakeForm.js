@@ -116,7 +116,7 @@ const StakeForm = () => {
             <span>for more info</span>
           </div>
           {buttonText === "Add Liquidity on Uniswap" ? (
-            <a href={`https://app.uniswap.org/#/add/ETH/${sarcoContract?.address}`} target="_blank" rel="noopener noreferrer">
+            <a href={`https://app.uniswap.org/#/add/v2/ETH/${sarcoContract?.address}`} target="_blank" rel="noopener noreferrer">
               <Button type="button">
                 {buttonText}
               </Button>
