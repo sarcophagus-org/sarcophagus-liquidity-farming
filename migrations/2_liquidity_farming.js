@@ -8,11 +8,11 @@ module.exports = async function (deployer, network) {
   let lpAddress, sarcoAddress
 
   if (['mainnet', 'mainnet-fork'].includes(network)) {
-    lpAddress = ''
+    lpAddress = '0x8d3c9f4d0a8dbb6d5e2068ac36719290f7988cc1'
     sarcoAddress = '0x7697b462a7c4ff5f8b55bdbc2f4076c2af9cf51a'
   } 
   else if (['goerli', 'goerli-fork'].includes(network)) {
-    sarcoAddress = '0x4633b43990b41B57b3678c6F3Ac35bA75C3D8436',
+    sarcoAddress = '0x4633b43990b41B57b3678c6F3Ac35bA75C3D8436'
     lpAddress = '0x1af9eD986c61D40983c055ACa20e4Df7980399cF'
   }
   else {
