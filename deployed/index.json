@@ -1,0 +1,10 @@
+{
+  "1": {
+    "Migrations": "0x46bB60b19b721dCf265f07044EaDcE92f3be17cb",
+    "LiquidityFarming": "0xA1992139fB9d37B2aB078c2e7556E2D961f57848"
+  },
+  "5": {
+    "Migrations": "0xA8d596B26D7a640F45E4e853D27F698b7b543bd4",
+    "LiquidityFarming": "0x6459C4C41C4E7a1B46AfCAfFf569a62DB10f3c18"
+  }
+}
